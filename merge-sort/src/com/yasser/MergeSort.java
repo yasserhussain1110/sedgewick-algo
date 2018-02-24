@@ -23,6 +23,7 @@ public class MergeSort {
 
     sortFromLoToHi(items, aux, lo, mid);
     sortFromLoToHi(items, aux,mid+1, hi);
+    if (less(items[mid], items[mid+1])) return;
     merge(items, aux, lo, mid, hi);
   }
 
