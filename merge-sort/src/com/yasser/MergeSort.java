@@ -12,41 +12,34 @@ public class MergeSort {
   }
 
   public static void sort(Comparable[] items) {
-    sortFromLoToHi(items,0, items.length - 1);
+    Comparable[] aux = new Comparable[items.length];
+    sortFromLoToHi(items, aux,0, items.length - 1);
   }
 
-  public static void sortFromLoToHi(Comparable[] items, int lo, int hi) {
+  public static void sortFromLoToHi(Comparable[] items, Comparable[] aux, int lo, int hi) {
     if (lo >= hi) return;
 
     int mid = (hi + lo) / 2;
 
-    sortFromLoToHi(items, lo, mid);
-    sortFromLoToHi(items, mid+1, hi);
-    merge(items, lo, mid, hi);
+    sortFromLoToHi(items, aux, lo, mid);
+    sortFromLoToHi(items, aux,mid+1, hi);
+    merge(items, aux, lo, mid, hi);
   }
 
-  public static void merge(Comparable[] items, int lo, int mid, int hi) {
-    int N = hi - lo + 1;
-    Comparable clone[] = new Comparable[N];
-    for (int i = 0; i < N; i++) clone[i] = items[i + lo];
+  public static void merge(Comparable[] items, Comparable[] aux, int lo, int mid, int hi) {
+    for (int i=lo; i<=hi; i++) aux[i] = items[i];
 
-    int a = 0;
-    int correspondingMid = mid - lo;
-    int b = correspondingMid + 1;
-    int i;
-
-    for (i = lo; i <= hi && a <= correspondingMid && b < N; i++) {
-      if (less(clone[a], clone[b])) {
-        items[i] = clone[a++];
+    int  i = lo, j = mid + 1;
+    for (int k = lo; k <= hi; k++) {
+      if (i > mid) {
+        items[k] = aux[j++];
+      } else if (j > hi) {
+        items[k] = aux[i++];
+      } else if (less(aux[i], aux[j])) {
+        items[k] = aux[i++];
       } else {
-        items[i] = clone[b++];
+        items[k] = aux[j++];
       }
-    }
-
-    if (a > correspondingMid) {
-      for (; i <= hi; i++,b++) items[i] = clone[b];
-    } else {
-      for (; i <= hi; i++,a++) items[i] = clone[a];
     }
   }
 }
